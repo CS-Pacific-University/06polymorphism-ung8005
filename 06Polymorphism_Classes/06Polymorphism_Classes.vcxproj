@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClCompile Include="LetterParcel.cpp" />
     <ClCompile Include="OvernightPackageParcel.cpp" />
-    <ClCompile Include="Parcels.cpp" />
+    <ClCompile Include="Parcel.cpp" />
     <ClCompile Include="PostcardParcel.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
@@ -151,7 +151,7 @@
   <ItemGroup>
     <ClInclude Include="LetterParcel.h" />
     <ClInclude Include="OvernightPackageParcel.h" />
-    <ClInclude Include="Parcels.h" />
+    <ClInclude Include="Parcel.h" />
     <ClInclude Include="PostcardParcel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

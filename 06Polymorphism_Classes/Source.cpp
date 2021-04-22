@@ -13,13 +13,13 @@
 //***************************************************************************
 
 #include <iostream>
+#include <iomanip>
 #include "LetterParcel.h"
 
 using namespace std;
 
 int main() {
 
-  Letter myLetter (
   cout << "Reached the end!\n";
   return EXIT_SUCCESS;
 }

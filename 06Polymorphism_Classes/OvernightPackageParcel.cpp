@@ -3,11 +3,10 @@
 // Author:		 Ashley Ung 
 // Date:		   4/20/2021
 // Class:		   CS 250
-// Assignment: Demonstrates inheritance. This is a subclass 
-//             OvernightPackageParcel that represents the information for one 
-//             overnight package parcel.
-// Purpose:		 Declares a programmer-defined subclass OvernightPackageParcel 
-//             for a parcel. 
+// Assignment: A class hierarchy on mail services demonstrating the use of 
+//             polymorphism, virtual functions, and dynamic memory.
+// Purpose:		 Defines each of the function prototypes associated with the
+//             child class OvernightPackageParcel.
 //***************************************************************************
 
 #include "OvernightPackageParcel.h"
@@ -23,7 +22,7 @@
 //
 // Returned:		none
 //***************************************************************************
-OvernightPackageParcel::OvernightPackageParcel () : Parcels () {
+OvernightPackageParcel::OvernightPackageParcel () : Parcel () {
   mVolume = 0;
 }
 
@@ -37,26 +36,32 @@ OvernightPackageParcel::OvernightPackageParcel () : Parcels () {
 //
 // Returned:		none
 //***************************************************************************
-OvernightPackageParcel::OvernightPackageParcel(int trackingNumber, std::string sender,    //space parathesis 
-  std::string reciever, int weight,
-  int travelDistance, int volume) :
-  Parcels (trackingNumber, sender, reciever,
-    weight, travelDistance) {
+OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,           // check coding standards 
+                                                std::string sender,     
+                                                std::string reciever, 
+                                                int weight, 
+                                                int travelDistance, 
+                                                int volume) : 
+                                                Parcel (trackingNumber, 
+                                                        sender, reciever,
+                                                        weight, 
+                                                        travelDistance) {
   mVolume = volume; 
 }
 
 //***************************************************************************
 // Function:	  read
 //
-// Description:	Inputs the OvernightPackageParcel to the stream if the read in data
-//              is valid. 
+// Description:	Inputs the OvernightPackageParcel to the stream if the read 
+//              in data is valid. 
 //
 // Parameters:	rcIn - the stream to read from 
 //
-// Returned:		True, if the OvernightPackageParcel volume is read in; else, false. 
+// Returned:		True, if the OvernightPackageParcel volume is read in; else, 
+//              false. 
 //***************************************************************************
 bool OvernightPackageParcel::read (istream& rcIn) {
-  bool bIsRead = Parcels::read (rcIn);
+  bool bIsRead = Parcel::read (rcIn);
 
   if (rcIn >> mVolume) {
     bIsRead = true;

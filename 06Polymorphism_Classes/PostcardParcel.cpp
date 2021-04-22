@@ -3,10 +3,10 @@
 // Author:		 Ashley Ung 
 // Date:		   4/20/2021
 // Class:		   CS 250
-// Assignment: Demonstrates inheritance. This is a subclass PostcardParcel 
-//             that represents the information for one postcard parcel. 
-// Purpose:		 Declares a programmer-defined subclass PostcardParcel for a
-//             parcel. 
+// Assignment: A class hierarchy on mail services demonstrating the use of 
+//             polymorphism, virtual functions, and dynamic memory.
+// Purpose:		 Defines each of the function prototypes associated with the
+//             child class PostcardParcel. 
 //***************************************************************************
 
 #include "PostcardParcel.h"
@@ -22,14 +22,14 @@
 //
 // Returned:		none
 //***************************************************************************
-PostcardParcel::PostcardParcel () : Parcels () {
+PostcardParcel::PostcardParcel () : Parcel () {
   mMessage = "";
 }
 
 //***************************************************************************
 // Constructor:	PostcardParcel 
 //
-// Description:	Call the Parcels constructor, set mMessage equal to the
+// Description:	Call the Parcel constructor, set mMessage equal to the
 //              given parameter. 
 //
 // Parameters:	
@@ -39,7 +39,7 @@ PostcardParcel::PostcardParcel () : Parcels () {
 PostcardParcel::PostcardParcel (int trackingNumber, std::string sender,
                                 std::string reciever, int weight,
                                 int travelDistance, std::string message) :
-                                Parcels (trackingNumber, sender, reciever,
+                                Parcel (trackingNumber, sender, reciever,
                                 weight, travelDistance) {
   mMessage = message;
 }
@@ -55,7 +55,7 @@ PostcardParcel::PostcardParcel (int trackingNumber, std::string sender,
 // Returned:		True, if the PostcardParcel volume is read in; else, false. 
 //***************************************************************************
 bool PostcardParcel::read (istream& rcIn) {
-  bool bIsRead = Parcels::read (rcIn);
+  bool bIsRead = Parcel::read (rcIn);
 
   if (rcIn >> mMessage) {
     bIsRead = true;

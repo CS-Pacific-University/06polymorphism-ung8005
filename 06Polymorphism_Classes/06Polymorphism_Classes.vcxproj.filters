@@ -18,7 +18,7 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Parcels.cpp">
+    <ClCompile Include="Parcel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LetterParcel.cpp">
@@ -37,7 +37,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Parcels.h">
+    <ClInclude Include="Parcel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LetterParcel.h">
