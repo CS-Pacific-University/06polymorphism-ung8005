@@ -25,21 +25,15 @@ class OvernightPackageParcel : public Parcel {
     OvernightPackageParcel ();
     OvernightPackageParcel (int trackingNumber, string sender, string reciever,
                             int weight, int travelDstance, int volume);
-    ~OvernightPackageParcel ();                                         // destructors? 
 
-    virtual void addInsurance ();
-    virtual void addRush ();
+    int getDeliveryDay () const override;                                  // can i put overide ?
+    double getCost () const override;                                  // can i put overide ? also how come the uml did not show this function? should pures be in all subclasses?
 
-    virtual double getCost () const;
-    virtual double getInsuranceCost () const;
-    virtual double getRushCost () const;
-    virtual double getTotalCost () const;
-    virtual double getWeightCost () const;
+    virtual double setInsurance (bool);
+    virtual double setRush (bool);
 
-    virtual void print (ostream& rcOut) const;
     virtual bool read (istream& rcIn);
-
-    bool read (istream& rcIn);
+    virtual void print (ostream& rcOut) const;
 
   private:
     int mVolume;

@@ -13,25 +13,6 @@
 #include <iostream>
 #include <string>
 
-//***************************************************************************   // do this hear or in .h file? 
-// Constructor:	Parcel
-//
-// Description:	Initialize the to and from to an empty string, the weight, 
-//              tracking number, and travel distance to zero. 
-//
-// Parameters:	none
-//
-// Returned:		none
-//***************************************************************************
-//Parcel::Parcel () : Parcel () {
-//  int mTrackingNumber = 0; 
-//  string mSenderAddress = "";
-//  string mRecieverAddress = ""; 
-//  int mWeightInOunces = 0; 
-//  int mTravelDistance = 0;
-//
-//}
-
 //***************************************************************************
 // Constructor:	Parcel
 //
@@ -46,26 +27,89 @@
 // Returned:		none
 //***************************************************************************
 Parcel::Parcel (int trackingNumber, std::string sender, 
-                std::string reciever, int weight, int travelDistance) {
+                std::string reciever, int weight, int travelDistance) {       //initialize protected in constructrs? 
   mTrackingNumber = trackingNumber;
   mSenderAddress = sender; 
   mRecieverAddress = reciever;
-  mWeightInOunces = weight;
+  mWeight = weight;
   mTravelDistance = travelDistance; 
 }
 
 //***************************************************************************
-// Function:	  print
+// Function:	  getWeight 
 //
-// Description:	Output the Parcel to the stream
+// Description:	Retrieve the weight of the parcel.
 //
-// Parameters:	rcOut   - the stream to output to 
+// Parameters:	none 
 //
-// Returned:		ostream - the output stream
+// Returned:		The weight of the parcel. 
 //***************************************************************************
-void Parcel::print (std::ostream& rcOut) const {
-  rcOut << "TID: " << mTrackingNumber << " From: " << mSenderAddress 
-        << " To: " << mRecieverAddress;
+int Parcel::getWeight () const {
+  return mWeight; 
+}
+
+//***************************************************************************
+// Function:	  getDistance
+//
+// Description: Retrieve the travel distance of the parcel. 
+//
+// Parameters:	none
+//
+// Returned:		The distance of the parcel.
+//***************************************************************************
+int Parcel::getDistance () const {
+  return mTravelDistance;
+}
+
+//***************************************************************************
+// Function:	 
+//
+// Description:	
+//
+// Parameters:	 
+//
+// Returned:		 
+//***************************************************************************
+bool Parcel::getInsured () const {
+  return mbIsInsured;                                                         // is this correct?? 
+}
+
+//***************************************************************************
+// Function:	 
+//
+// Description:	
+//
+// Parameters:	 
+//
+// Returned:		 
+//***************************************************************************
+bool Parcel::getRushed () const {
+  return mbIsRushed;                                                          // is this correct? 
+}
+
+//***************************************************************************
+// Function:	  getTID
+//
+// Description:	Retrieve the tracking ID number of the parcel. 
+//
+// Parameters:	none 
+//
+// Returned:		The tracking ID number of the parcel. 
+//***************************************************************************
+int Parcel::getTID () const {
+  return mTrackingNumber;
+}
+
+//***************************************************************************
+// Function:	 
+//
+// Description:	
+//
+// Parameters:	 
+//
+// Returned:		 
+//***************************************************************************
+void Parcel::setCost (double) {
 }
 
 //***************************************************************************
@@ -91,66 +135,15 @@ bool Parcel::read (istream& rcIn) {
 }
 
 //***************************************************************************
-// Function:	  addInsurance 
+// Function:	  print
 //
-// Description:	
+// Description:	Output the Parcel to the stream
 //
-// Parameters:	 
+// Parameters:	rcOut   - the stream to output to 
 //
-// Returned:		 
+// Returned:		ostream - the output stream
 //***************************************************************************
-void Parcel::addInsurance () {
-  mbIsInsured = true;
-}
-
-//***************************************************************************
-// Function:	  addRush
-//
-// Description:	 
-//
-// Parameters:	 
-//
-// Returned:		 
-//***************************************************************************
-void Parcel::addRush() {
-  mbIsRushed = true;
-}
-
-//***************************************************************************
-// Function:	  getWeight 
-//
-// Description:	Returns the value of the weight. 
-//
-// Parameters:	none
-//
-// Returned:		The weight in ounces. 
-//***************************************************************************
-double Parcel::getWeight () const {
-  return mWeightInOunces;
-}
-
-//***************************************************************************
-// Function:	  getInsuranceStatus
-//
-// Description:	Returns whether the parcel has insurance or not. 
-//
-// Parameters:	none
-//
-// Returned:		The status of the parcel, if it is insured or not. 
-//***************************************************************************
-double Parcel::getInsuranceStatus () const {
-  return mbIsInsured; 
-}
-
-//***************************************************************************
-// Function:	  getRushedStatus 
-//
-// Description:	Returns whether the parcel is rushed or not 
-//
-// Parameters:	none
-//
-// Returned:		The status of the parcel, if it is rushed or not. 
-//***************************************************************************
-double Parcel::getRushedStatus () const {
-  return mbIsRushed; 
+void Parcel::print (std::ostream& rcOut) const {
+  rcOut << "TID: " << mTrackingNumber << " From: " << mSenderAddress
+        << " To: " << mRecieverAddress;
 }

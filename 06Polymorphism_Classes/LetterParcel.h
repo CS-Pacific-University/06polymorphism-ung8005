@@ -20,24 +20,15 @@ using namespace std;
 class LetterParcel : public Parcel {
 
   public:
-    LetterParcel ();
-    LetterParcel (int trackingNumber, string sender, string reciever,         // intialize here or make two diff constructors? 
-                  int weight, int travelDistance, double insuranceCost);
-    //~LetterParcel ();                                                                 // destructors? 
+    LetterParcel (int trackingNumber, string sender, string reciever,       
+                  int weight, int travelDistance);
 
-    virtual void addInsurance ();
-    virtual void addRush ();
+    int getDeliveryDay () const override;                                  // can i put overide ?
+    double getCost () const override;                                  // can i put overide ? also how come the uml did not show this function? should pures be in all subclasses?
 
-    virtual double getCost () const;                                            // is the = 0 just for the parent class? 
-    virtual double getInsuranceCost () const; 
-    virtual double getRushCost () const;
-    virtual double getTotalCost () const; 
-    virtual double getWeightCost () const;
+    virtual double setInsurance (bool mbIsInsured);
+    virtual double setRush (bool mbIsRushed);
 
-    virtual void print (std::ostream& rcOut) const;
     virtual bool read (istream& rcIn);
-
-  private:
-    double mInsuranceCost; 
-
+    virtual void print (ostream& rcOut) const;
 };

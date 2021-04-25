@@ -15,32 +15,36 @@
 
 using namespace std;
 
-class Parcels {
+class Parcel {
   public:  
-                                                                      // 2 constructors? 
-    //Parcel ();
-    Parcel (int trackingNumber = 0, string sender = "", string reciever = "",   // check intialized correctly and correct constructor 
+    Parcel (int trackingNumber = 0, string sender = "", string reciever = "",   
             int weight = 0, int travelDistance = 0);
-    //~Parcel ();                                                                 // are we using destructors?  
 
-    virtual void addInsurance ();
-    virtual void addRush ();
+    int getWeight () const; 
+    int getDistance () const;    
+    bool getInsured () const;  
+    bool getRushed () const; 
+    int getTID () const; 
 
-    virtual double getCost () const = 0;                    //pure virtual function 
-    double getWeight () const;                             // protected 
-    double getInsuranceStatus () const;                    // protected
-    double getRushedStatus () const;                       // protected
+    void setCost (double);             
   
-    virtual void print (std::ostream& rcOut) const;
     virtual bool read (istream& rcIn);
+    virtual void print (ostream& rcOut) const;
+
+    virtual int getDeliveryDay () const = 0;
+    virtual double getCost () const = 0;
+
+  protected : 
+    int mWeight;
+    bool mbIsInsured;
+    bool mbIsRushed;
+    bool mbIsDelivered; 
 
   private:
     string mSenderAddress;
     string mRecieverAddress;
     int mTrackingNumber; 
-    int mWeightInOunces; 
     int mTravelDistance;  
-    bool mbIsInsured; 
-    bool mbIsRushed; 
+    double mCost; 
 };
 

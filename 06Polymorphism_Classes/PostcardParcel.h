@@ -24,19 +24,16 @@ class PostcardParcel : public Parcel {
     PostcardParcel ();
     PostcardParcel (int trackingNumber, string sender, string reciever,
                     int weight, int travelDistance, string message);
-    ~PostcardParcel ();                                                     // destructors? 
    
-    virtual void addInsurance ();
-    virtual void addRush ();
-  
-    virtual double getCost () const;
-    virtual double getInsuranceCost () const;
-    virtual double getRushCost () const;
-    virtual double getTotalCost () const;
-    virtual double getWeightCost () const;
+    int getDeliveryDay () const override;                                  // can i put overide ?
+    double getCost () const override;                                  // can i put overide ?
 
-    virtual void print (ostream& rcOut) const;
+
+    virtual double setInsurance (bool);
+    virtual double setRush (bool);
+
     virtual bool read (istream& rcIn);
+    virtual void print (ostream& rcOut) const;
 
   private:
     string mMessage;

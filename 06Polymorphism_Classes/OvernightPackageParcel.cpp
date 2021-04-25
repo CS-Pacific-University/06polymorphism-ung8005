@@ -50,6 +50,54 @@ OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,           //
 }
 
 //***************************************************************************
+// Function:	  getDeliveryDay
+//
+// Description:	
+//
+// Parameters:	none
+//
+// Returned:		
+//***************************************************************************
+int PostcardParcel::getDeliveryDay () const {
+}
+
+//***************************************************************************
+// Function:	  getCost
+//
+// Description:	
+//
+// Parameters:	none
+//
+// Returned:		The total cost of the overnight package parcel. 
+//***************************************************************************
+double OvernightPackageParcel::getCost () const {
+}
+
+//***************************************************************************
+// Function:	  setInsurance 
+//
+// Description:	 
+//
+// Parameters:	
+//
+// Returned:		 
+//***************************************************************************
+double OvernightPackageParcel::setInsurance (bool mbIsInsured) {
+}
+
+//***************************************************************************
+// Function:	  setRush
+//
+// Description:	 
+//
+// Parameters:	
+//
+// Returned:		
+//***************************************************************************
+double OvernightPackageParcel::setRush (bool mbIsRushed) {                  
+}
+
+//***************************************************************************
 // Function:	  read
 //
 // Description:	Inputs the OvernightPackageParcel to the stream if the read 
@@ -81,10 +129,10 @@ bool OvernightPackageParcel::read (istream& rcIn) {
 //
 // Returned:	  none
 //***************************************************************************
-//void OvernightPackageParcel::print (ostream& rcOut) const {
-//
-//  Parcels::print (rcOut);
-//
-//  rcOut << mVolume;
-//}
+void OvernightPackageParcel::print (ostream& rcOut) const {
+
+  Parcel::print (rcOut);
+
+  rcOut << mVolume;
+}
 

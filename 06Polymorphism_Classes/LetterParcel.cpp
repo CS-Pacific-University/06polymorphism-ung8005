@@ -15,20 +15,6 @@
 //***************************************************************************
 // Constructor:	LetterParcel 
 //
-// Description:	Call the LetterParcel default constructor, set mInsuranceCost  
-//              to the insurance cost of a letter, 0.45.   
-//
-// Parameters:	none
-//
-// Returned:		none
-//***************************************************************************
-LetterParcel::LetterParcel () : Parcel () { 
-  mInsuranceCost = 0.45;                                                      // intialize to zero or 0.45??? 
-}
-
-//***************************************************************************
-// Constructor:	LetterParcel 
-//
 // Description:	Call the Parcel constructor, set mInsurance equal to the  
 //              given parameter. 
 //
@@ -36,43 +22,27 @@ LetterParcel::LetterParcel () : Parcel () {
 //
 // Returned:		none
 //***************************************************************************
-LetterParcel::LetterParcel (int trackingNumber, std::string sender,
+LetterParcel::LetterParcel (int trackingNumber, std::string sender,             // what do i do for this constructor? what am i suppose to initialize? the protcted variables????
                             std::string reciever, int weight,
-                            int travelDistance, double insuranceCost) :
+                            int travelDistance) :
                             Parcel (trackingNumber, sender, reciever,
                             weight, travelDistance) {
-  mInsuranceCost = insuranceCost;
 }
 
 //***************************************************************************
-// Function:	  addInsurance 
+// Function:	  getDeliveryDay
 //
-// Description:	 
+// Description:	
 //
 // Parameters:	none
 //
-// Returned:		 
+// Returned:		
 //***************************************************************************
-void LetterParcel::addInsurance () {
-  const double INSURANCE_COST = 0.45;
-  cout << "$" << INSURANCE_COST << endl;
+int LetterParcel::getDeliveryDay () const {
 }
 
 //***************************************************************************
-// Function:	  addRushed
-//
-// Description:	 
-//
-// Parameters:	none
-//
-// Returned:		 
-//***************************************************************************
-void addRush () {
-  mbIsRush = true;
-}
-
-//***************************************************************************
-// Function:	  getTotalCost
+// Function:	  getCost
 //
 // Description:	Returns the total cost of the letter parcel, after taking 
 //              into account whether the letter is rushed, insured and the 
@@ -82,64 +52,101 @@ void addRush () {
 //
 // Returned:		The total cost of the letter parcel. 
 //***************************************************************************
-double LetterParcel::getTotalCost () const {
+double LetterParcel::getCost () const {
   double returnAmount;
-  if (getInsuranceStatus () && getRushedStatus ()) {                    //protected 
-    returnAmount = getRushCost () + getInsuranceCost () + getWeightCost ();
+
+  if (mbIsInsured && mbIsRushed) {
+    returnAmount = mbIsInsured + mbIsRushed + getWeightCost ();             // should i call the function or just be using the mbIs... 
   }
-  else if (getInsuranceStatus ()) {                                    //protected
-    returnAmount = getInsuranceCost () + getWeightCost ();
+  else if (mbIsInsured) {
+    returnAmount = mbIsInsured + getWeightCost ();
   }
-  else if (getRushedStatus ()) {
-    returnAmount = getRushCost () + getWeightCost ();
+  else if (mbIsRushed) {
+    returnAmount = getRushCost (mbIsRushed) + getWeightCost ();
   }
   else {
     returnAmount = getWeightCost ();
   }
+  return returnAmount;
+}
+
+// weight cost
+//double LetterParcel::getWeightCost () const {
+//  double const COST_PER_OUNCE = 0.45;
+//  return COST_PER_OUNCE * getWeightCost ();
+//}
+
+//***************************************************************************
+// Function:	  setInsurance 
+//
+// Description:	 
+//
+// Parameters:	
+//
+// Returned:		 
+//***************************************************************************
+double LetterParcel::setInsurance (bool mbIsInsured) {                          // should i do an if state. to check?? like the function below? 
+  const double INSURANCE_COST = 0.45;
+  mbIsInsured = INSURANCE_COST;
+  return mbIsInsured;
 }
 
 //***************************************************************************
-// Function:	  getWeightCost
+// Function:	  setRush
 //
-// Description:	Returns the cost of the letter regarding how heavy it is. 
-//              Each letter costs $0.45 per ounce. 
+// Description:	 
 //
-// Parameters:	none
+// Parameters:	
 //
-// Returned:		The cost of the letter based on it's weight.  
+// Returned:		
 //***************************************************************************
-double LetterParcel::getWeightCost () const {
-  double const COST_PER_OUNCE = 0.45;
-  return COST_PER_OUNCE * getWeightCost ();
+double LetterParcel::setRush (bool mbIsRushed) {                              // is this correct? 
+  const double TEN_PERCENT_CONVERSION = 0.10;
+  double rushCost; 
+  if (mbIsRushed) {
+    rushCost = getCost () * TEN_PERCENT_CONVERSION;
+    mbIsRushed = true;
+  }
+  else {
+    mbIsRushed = false; 
+  }
+  return mbIsRushed; 
+}
+
+/***************************************************************************
+// Function:	  read
+//
+// Description:	Inputs the LetterParcel to the stream if the read in data
+//              is valid.
+//
+// Parameters:	rcIn - the stream to read from
+//
+// Returned:		True, if the LetterParcel is read in; else, false.
+//***************************************************************************
+bool LetterParcel::read (istream& rcIn) {
+  bool bIsRead = Parcel::read (rcIn);
+
+  if (rcIn >>  ???????) {
+    bIsRead = true;
+  }
+  else {
+    bIsRead = false;
+  }
+  return bIsRead;
 }
 
 //***************************************************************************
-// Function:	  getRushCost
+// Function:	  print
 //
-// Description:	Returns the cost of the letter if it is rushed. If the letter
-//              is rushed, there is an extra 10% charge added to the current 
-//              cost. 
-//              
-// Parameters:	none
+// Description:	Print the LetterParcel to the stream.
 //
-// Returned:		The cost of the letter based on an additional rushed price. 
+// Parameters:	rcOut - the stream to print to
+//
+// Returned:	  none
 //***************************************************************************
-double LetterParcel::getRushCost () const {
-  const int TEN_PERCENT_CONVERSION = 0.10;
-  return getTotalCost () * TEN_PERCENT_CONVERSION;                    
-}
+void LetterParcel::print (ostream& rcOut) const {
 
-//***************************************************************************
-// Function:	  getInsuranceCost
-//
-// Description:	Returns the cost of the letter if it has an insurance. If the
-//              letter has insuranced, the insurance cost for a letter is 
-//              $0.45.
-//
-// Parameters:	none
-//
-// Returned:		The total cost of the letter parcel. 
-//***************************************************************************
-double LetterParcel::getInsuranceCost () const {
-  return mInsuranceCost;
+  Parcel::print (rcOut);
+
+  rcOut << ??????;
 }
