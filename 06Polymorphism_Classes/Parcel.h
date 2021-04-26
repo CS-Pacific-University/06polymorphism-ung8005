@@ -36,6 +36,7 @@ class Parcel {
 
   protected : 
     int mWeight;
+    int mTravelDistance;
     bool mbIsInsured;
     bool mbIsRushed;
     bool mbIsDelivered; 
@@ -43,8 +44,7 @@ class Parcel {
   private:
     string mSenderAddress;
     string mRecieverAddress;
-    int mTrackingNumber; 
-    int mTravelDistance;  
+    int mTrackingNumber;  
     double mCost; 
 };
 

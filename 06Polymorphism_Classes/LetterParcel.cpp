@@ -12,6 +12,10 @@
 #include "LetterParcel.h"
 #include <iostream>
 
+LetterParcel::LetterParcel() : Parcel () {
+
+}
+
 //***************************************************************************
 // Constructor:	LetterParcel 
 //
@@ -39,6 +43,19 @@ LetterParcel::LetterParcel (int trackingNumber, std::string sender,             
 // Returned:		
 //***************************************************************************
 int LetterParcel::getDeliveryDay () const {
+  const int MINIMUM_DAY = 1;
+  const int RUSHED_DAY = 1;
+  const int MILES_PER_DAY = 100;
+
+  int deliveryDay = MINIMUM_DAY;
+
+  deliveryDay += getDistance () / MILES_PER_DAY;                        // check
+
+  if (mbIsRushed && deliveryDay > MINIMUM_DAY) {
+    deliveryDay -= RUSHED_DAY;
+  }
+
+  return deliveryDay;
 }
 
 //***************************************************************************
@@ -53,28 +70,24 @@ int LetterParcel::getDeliveryDay () const {
 // Returned:		The total cost of the letter parcel. 
 //***************************************************************************
 double LetterParcel::getCost () const {
-  double returnAmount;
+  double const COST_PER_OUNCE = 0.45;
+  double const INSURANCE_COST = 0.45;
+  double const TEN_PERCENT_CONVERSION = 1.1;
 
-  if (mbIsInsured && mbIsRushed) {
-    returnAmount = mbIsInsured + mbIsRushed + getWeightCost ();             // should i call the function or just be using the mbIs... 
+  double returnAmount = 0;
+
+  returnAmount += COST_PER_OUNCE * mWeight;
+
+  if (mbIsInsured) {
+    returnAmount += INSURANCE_COST; 
   }
-  else if (mbIsInsured) {
-    returnAmount = mbIsInsured + getWeightCost ();
+
+  if (mbIsRushed) {
+    returnAmount *= TEN_PERCENT_CONVERSION;
   }
-  else if (mbIsRushed) {
-    returnAmount = getRushCost (mbIsRushed) + getWeightCost ();
-  }
-  else {
-    returnAmount = getWeightCost ();
-  }
+
   return returnAmount;
 }
-
-// weight cost
-//double LetterParcel::getWeightCost () const {
-//  double const COST_PER_OUNCE = 0.45;
-//  return COST_PER_OUNCE * getWeightCost ();
-//}
 
 //***************************************************************************
 // Function:	  setInsurance 
@@ -85,10 +98,8 @@ double LetterParcel::getCost () const {
 //
 // Returned:		 
 //***************************************************************************
-double LetterParcel::setInsurance (bool mbIsInsured) {                          // should i do an if state. to check?? like the function below? 
-  const double INSURANCE_COST = 0.45;
-  mbIsInsured = INSURANCE_COST;
-  return mbIsInsured;
+void LetterParcel::setInsurance (bool insured) {                          // should i do an if state. to check?? like the function below? 
+  mbIsInsured = insured; 
 }
 
 //***************************************************************************
@@ -100,20 +111,11 @@ double LetterParcel::setInsurance (bool mbIsInsured) {                          
 //
 // Returned:		
 //***************************************************************************
-double LetterParcel::setRush (bool mbIsRushed) {                              // is this correct? 
-  const double TEN_PERCENT_CONVERSION = 0.10;
-  double rushCost; 
-  if (mbIsRushed) {
-    rushCost = getCost () * TEN_PERCENT_CONVERSION;
-    mbIsRushed = true;
-  }
-  else {
-    mbIsRushed = false; 
-  }
-  return mbIsRushed; 
+void LetterParcel::setRush (bool rushed) {
+  mbIsRushed = rushed;
 }
 
-/***************************************************************************
+//***************************************************************************
 // Function:	  read
 //
 // Description:	Inputs the LetterParcel to the stream if the read in data
@@ -126,7 +128,7 @@ double LetterParcel::setRush (bool mbIsRushed) {                              //
 bool LetterParcel::read (istream& rcIn) {
   bool bIsRead = Parcel::read (rcIn);
 
-  if (rcIn >>  ???????) {
+  if (rcIn >> mWeight >> mTravelDistance) {
     bIsRead = true;
   }
   else {
@@ -148,5 +150,11 @@ void LetterParcel::print (ostream& rcOut) const {
 
   Parcel::print (rcOut);
 
-  rcOut << ??????;
+  if (mbIsInsured) {                                                      // order?
+    rcOut << "INSURED\t";
+  }
+
+  if (mbIsRushed) {
+    rcOut << "RUSHED\t";
+  }
 }

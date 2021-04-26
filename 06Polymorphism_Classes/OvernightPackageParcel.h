@@ -29,8 +29,8 @@ class OvernightPackageParcel : public Parcel {
     int getDeliveryDay () const override;                                  // can i put overide ?
     double getCost () const override;                                  // can i put overide ? also how come the uml did not show this function? should pures be in all subclasses?
 
-    virtual double setInsurance (bool);
-    virtual double setRush (bool);
+    virtual void setInsurance (bool insured);
+    virtual void setRush (bool rushed);
 
     virtual bool read (istream& rcIn);
     virtual void print (ostream& rcOut) const;

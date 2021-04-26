@@ -23,6 +23,7 @@ using namespace std;
 
 bool openFileForRead (ifstream& rcInFile, string fileName);
 void printMenuHeading ();
+void populatingArray (Parcel* apcParcel[], int& numParcels, ifstream& inFile); // coding standards 
 
 /****************************************************************************
 Function:		  main
@@ -53,12 +54,9 @@ int main() {
 
   ifstream inFile; 
 
-  //if (openFileForRead (inFile, INPUT_FILE)) {                             // not sure what to do here 
-  //  while (!inFile.eof ()) {
-  //  }
-  //}
+  openFileForRead (inFile, INPUT_FILE);
 
-  cout << "Mail Simulator!"; 
+  cout << "Mail Simulator!" << endl; 
 
   do {
     printMenuHeading ();
@@ -72,18 +70,15 @@ int main() {
     switch (parcelType) {
       case LETTER: 
         apcParcel[numParcels] = new LetterParcel; 
-        apcParcel[numParcels]->read (inFile);                             // makethis into a function an the ones belwo iy oo 
-        numParcels++;
+        populatingArray (apcParcel, numParcels, inFile);
         break; 
       case POSTCARD:
-        apcParcel[numParcels] = new PostcardParcel;                      // makethis into a function a
-        apcParcel[numParcels]->read (inFile); 
-        numParcels++;
+        apcParcel[numParcels] = new PostcardParcel;
+        populatingArray (apcParcel, numParcels, inFile);
         break; 
       case OVERNIGHT_PACKAGE:
-        apcParcel[numParcels] = new OvernightPackageParcel;              // makethis into a function a
-        apcParcel[numParcels]->read (inFile);
-        numParcels++;
+        apcParcel[numParcels] = new OvernightPackageParcel;
+        populatingArray (apcParcel, numParcels, inFile);
         break;
       default :
         break; 
@@ -132,6 +127,20 @@ void printMenuHeading () {
   const string OPTION_DELIVER = "4. Deliver";
   const string OPTION_QUIT = "5. Quit"; 
 
-  cout << OPTION_PRINT_ALL << endl << OPTION_ADD_INSURANCE << endl
+  cout << endl << OPTION_PRINT_ALL << endl << OPTION_ADD_INSURANCE << endl
        << OPTION_ADD_RUSH << endl << OPTION_DELIVER << OPTION_QUIT << endl;
+}
+
+/****************************************************************************
+Function:    populatingArray
+
+Description:  
+
+Parameters:   
+
+Returned:		 none
+****************************************************************************/
+void populatingArray (Parcel *apcParcel[], int &numParcels, ifstream &inFile){ // coding standards 
+  apcParcel[numParcels]->read (inFile);
+  numParcels++;
 }

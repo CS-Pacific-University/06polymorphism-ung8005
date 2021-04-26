@@ -27,12 +27,15 @@
 // Returned:		none
 //***************************************************************************
 Parcel::Parcel (int trackingNumber, std::string sender, 
-                std::string reciever, int weight, int travelDistance) {       //initialize protected in constructrs? 
+                std::string reciever, int weight, int travelDistance) {  
   mTrackingNumber = trackingNumber;
   mSenderAddress = sender; 
   mRecieverAddress = reciever;
   mWeight = weight;
   mTravelDistance = travelDistance; 
+  mbIsInsured = true; 
+  mbIsRushed = true; 
+  mbIsDelivered = false; 
 }
 
 //***************************************************************************
@@ -109,7 +112,8 @@ int Parcel::getTID () const {
 //
 // Returned:		 
 //***************************************************************************
-void Parcel::setCost (double) {
+double Parcel::getCost () const {
+  return mCost;
 }
 
 //***************************************************************************
@@ -144,6 +148,6 @@ bool Parcel::read (istream& rcIn) {
 // Returned:		ostream - the output stream
 //***************************************************************************
 void Parcel::print (std::ostream& rcOut) const {
-  rcOut << "TID: " << mTrackingNumber << " From: " << mSenderAddress
-        << " To: " << mRecieverAddress;
+  rcOut << "TID: " << mTrackingNumber << "\tFrom: " << mSenderAddress
+        << "\tTo: " << mRecieverAddress << "\t";
 }

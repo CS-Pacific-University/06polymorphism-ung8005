@@ -58,7 +58,25 @@ OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,           //
 //
 // Returned:		
 //***************************************************************************
-int PostcardParcel::getDeliveryDay () const {
+int OvernightPackageParcel::getDeliveryDay () const {
+  const int RUSHED_DELIVERY_DAY = 1;
+  const int ONE_DAY = 1; 
+  const int TWO_DAYS = 2;
+  const int LONG_DISTANCE_MILES = 1000;
+
+  int deliveryDay; 
+
+  if (mbIsRushed) {
+    deliveryDay = RUSHED_DELIVERY_DAY;
+  }
+  else if (mTravelDistance <= LONG_DISTANCE_MILES) {
+    deliveryDay = ONE_DAY;
+  }
+  else {
+    deliveryDay = TWO_DAYS;
+  }
+
+  return deliveryDay;
 }
 
 //***************************************************************************
@@ -71,6 +89,30 @@ int PostcardParcel::getDeliveryDay () const {
 // Returned:		The total cost of the overnight package parcel. 
 //***************************************************************************
 double OvernightPackageParcel::getCost () const {
+  const int HIGH_VOLUME = 100;
+  const int HIGH_VOLUME_COST = 20; 
+  const int LOW_VOLUME_COST = 12; 
+  const double INSURANCE_RATE = 1.25;
+  const double RUSH_RATE = 1.75;
+
+  double returnAmount = 0;
+
+  if (mVolume > HIGH_VOLUME) {
+    returnAmount = HIGH_VOLUME_COST;
+  }
+  else {
+    returnAmount = LOW_VOLUME_COST;
+  }
+
+  if (mbIsInsured) {
+    returnAmount *= INSURANCE_RATE;
+  }
+
+  if (mbIsRushed) {
+    returnAmount *= RUSH_RATE; 
+  }
+
+  return returnAmount;
 }
 
 //***************************************************************************
@@ -82,9 +124,9 @@ double OvernightPackageParcel::getCost () const {
 //
 // Returned:		 
 //***************************************************************************
-double OvernightPackageParcel::setInsurance (bool mbIsInsured) {
+void OvernightPackageParcel::setInsurance (bool insured) {             
+  mbIsInsured = insured;
 }
-
 //***************************************************************************
 // Function:	  setRush
 //
@@ -94,7 +136,8 @@ double OvernightPackageParcel::setInsurance (bool mbIsInsured) {
 //
 // Returned:		
 //***************************************************************************
-double OvernightPackageParcel::setRush (bool mbIsRushed) {                  
+void OvernightPackageParcel::setRush (bool rushed) {
+  mbIsRushed = rushed;
 }
 
 //***************************************************************************
@@ -111,7 +154,7 @@ double OvernightPackageParcel::setRush (bool mbIsRushed) {
 bool OvernightPackageParcel::read (istream& rcIn) {
   bool bIsRead = Parcel::read (rcIn);
 
-  if (rcIn >> mVolume) {
+  if (rcIn >> mWeight >> mTravelDistance >> mVolume) {
     bIsRead = true;
   }
   else {
@@ -133,6 +176,11 @@ void OvernightPackageParcel::print (ostream& rcOut) const {
 
   Parcel::print (rcOut);
 
-  rcOut << mVolume;
-}
+  if (mbIsInsured) {                                                      // order?
+    rcOut << "OVERNIGHT\t" << "INSURED\t";
+  }
 
+  if (mbIsRushed) {
+    rcOut << "OVERNIGHT\t" <<"RUSHED\t";
+  }
+}
