@@ -12,8 +12,16 @@
 #include "LetterParcel.h"
 #include <iostream>
 
-LetterParcel::LetterParcel() : Parcel () {
-
+//***************************************************************************
+// Constructor:	LetterParcel 
+//
+// Description:	Default constructor for letter parcel.  
+//
+// Parameters:	
+//
+// Returned:		none
+//*************************************************************************** // nothing to initialize, is it okay if i still have the constructor? 
+LetterParcel::LetterParcel () : Parcel () {
 }
 
 //***************************************************************************
@@ -49,7 +57,7 @@ int LetterParcel::getDeliveryDay () const {
 
   int deliveryDay = MINIMUM_DAY;
 
-  deliveryDay += getDistance () / MILES_PER_DAY;                        // check
+  deliveryDay += mTravelDistance / MILES_PER_DAY;                        // check
 
   if (mbIsRushed && deliveryDay > MINIMUM_DAY) {
     deliveryDay -= RUSHED_DAY;
@@ -57,62 +65,102 @@ int LetterParcel::getDeliveryDay () const {
 
   return deliveryDay;
 }
+//***************************************************************************
+// Function:	  getInsuranceCost
+//
+// Description:	Obtains the insurance cost if the letter is insured. The 
+//              insurance cost is $0.45.  
+//
+// Parameters:	none
+//
+// Returned:		The cost of the insurance. 
+//***************************************************************************
+double LetterParcel::getInsuranceCost () {
+  double const INSURANCE_COST = 0.45;
+  double cost = 0;
+
+  if (mbIsInsured) {
+    cost = INSURANCE_COST;
+  }
+  return cost;
+}
+
+//***************************************************************************
+// Function:	  getRushCost
+//
+// Description:	Obtains the rush cost if the letter is rushed. The rush 
+//              cost is 10% of the cost. 
+//
+// Parameters:	none
+//
+// Returned:		The rush cost for the letter. 
+//***************************************************************************
+double LetterParcel::getRushCost () {
+  const double DISCOUNT_CONVERSION = 10;
+  double cost = 0;
+  if (mbIsRushed) {
+    cost = getParcelCost () / DISCOUNT_CONVERSION;
+  }
+  return cost;
+}
+
+//***************************************************************************
+// Function:	  getParcelCost
+//
+// Description:	Obtains the cost of the Parcel. The cost of a letter is 
+//              $0.45 per ounce. 
+//
+// Parameters:	none
+//
+// Returned:		The cost of the letter. 
+//***************************************************************************
+double LetterParcel::getParcelCost () {
+  double const COST_PER_OUNCE = 0.45;
+  return mWeight * COST_PER_OUNCE;
+}
 
 //***************************************************************************
 // Function:	  getCost
 //
-// Description:	Returns the total cost of the letter parcel, after taking 
-//              into account whether the letter is rushed, insured and the 
-//              weight of the letter. 
+// Description: Returns the total cost of the letter parcel, after taking 
+//              into account whether the letter is rushed or insured. If 
+//              rushed, the rush price is added, if insured, then the 
+//              insurance price is added to the cost. 
 //
 // Parameters:	none
 //
 // Returned:		The total cost of the letter parcel. 
 //***************************************************************************
-double LetterParcel::getCost () const {
-  double const COST_PER_OUNCE = 0.45;
-  double const INSURANCE_COST = 0.45;
-  double const TEN_PERCENT_CONVERSION = 1.1;
-
-  double returnAmount = 0;
-
-  returnAmount += COST_PER_OUNCE * mWeight;
-
-  if (mbIsInsured) {
-    returnAmount += INSURANCE_COST; 
-  }
-
-  if (mbIsRushed) {
-    returnAmount *= TEN_PERCENT_CONVERSION;
-  }
-
-  return returnAmount;
+double LetterParcel::getCost () { 
+  return getParcelCost () + getInsuranceCost () + getRushCost ();
 }
 
 //***************************************************************************
 // Function:	  setInsurance 
 //
-// Description:	 
+// Description:	If the parcel is insured, the default bool for mbIsInsured is 
+//              reassigned with "true". 
 //
-// Parameters:	
+// Parameters:	none
 //
-// Returned:		 
+// Returned:		none 
 //***************************************************************************
-void LetterParcel::setInsurance (bool insured) {                          // should i do an if state. to check?? like the function below? 
-  mbIsInsured = insured; 
+void LetterParcel::setInsurance () {     
+  mbIsInsured = true; 
 }
 
 //***************************************************************************
 // Function:	  setRush
 //
-// Description:	 
+// Description:	If the parcel is rushed, the default bool for mbIsRushed is 
+//              reassigned with "true". 
 //
-// Parameters:	
+// Parameters:	none
 //
-// Returned:		
+// Returned:		none
 //***************************************************************************
-void LetterParcel::setRush (bool rushed) {
-  mbIsRushed = rushed;
+void LetterParcel::setRush () {
+  mbIsRushed = true;
 }
 
 //***************************************************************************
@@ -125,10 +173,10 @@ void LetterParcel::setRush (bool rushed) {
 //
 // Returned:		True, if the LetterParcel is read in; else, false.
 //***************************************************************************
-bool LetterParcel::read (istream& rcIn) {
+bool LetterParcel::read (istream &rcIn) {                                     // is this correct ? 
   bool bIsRead = Parcel::read (rcIn);
 
-  if (rcIn >> mWeight >> mTravelDistance) {
+  if (bIsRead) {
     bIsRead = true;
   }
   else {
@@ -146,15 +194,15 @@ bool LetterParcel::read (istream& rcIn) {
 //
 // Returned:	  none
 //***************************************************************************
-void LetterParcel::print (ostream& rcOut) const {
+void LetterParcel::print (ostream &rcOut) const {
 
   Parcel::print (rcOut);
 
-  if (mbIsInsured) {                                                      // order?
+  if (mbIsInsured) { 
     rcOut << "INSURED\t";
   }
 
   if (mbIsRushed) {
-    rcOut << "RUSHED\t";
+    rcOut << "RUSH\t";
   }
 }

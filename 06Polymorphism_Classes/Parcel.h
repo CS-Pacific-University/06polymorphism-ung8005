@@ -20,19 +20,21 @@ class Parcel {
     Parcel (int trackingNumber = 0, string sender = "", string reciever = "",   
             int weight = 0, int travelDistance = 0);
 
-    int getWeight () const; 
-    int getDistance () const;    
     bool getInsured () const;  
     bool getRushed () const; 
-    int getTID () const; 
+    int getTID () const;             
 
-    void setCost (double);             
-  
+    virtual int getDeliveryDay () const = 0;                            //pure so dont implment? 
+    virtual double getInsuranceCost () = 0;                             //pure didnt implemnt 
+    virtual double getRushCost () = 0;                                  //pure didnt implemnt 
+    virtual double getParcelCost () = 0;                                //pure didnt implemnt 
+    virtual double getCost () = 0;                                      //pure but i implmented :-/
+
+    virtual void setInsurance () = 0;
+    virtual void setRush () = 0;
+
     virtual bool read (istream& rcIn);
     virtual void print (ostream& rcOut) const;
-
-    virtual int getDeliveryDay () const = 0;
-    virtual double getCost () const = 0;
 
   protected : 
     int mWeight;

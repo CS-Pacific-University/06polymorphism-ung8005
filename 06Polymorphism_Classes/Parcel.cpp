@@ -20,7 +20,8 @@
 //              distance equal to the given parameters.  
 //
 // Parameters:	trackingNumber    - the tracking number to store  
-//							senderAndReciever - parcel's sender and reciever address
+//							sender            - parcel's sender
+//              reciever          - parcel's reciever 
 //              weight            - parcel's weight in ounces 
 //              travelDistance    - distance package will travel  
 //
@@ -33,61 +34,35 @@ Parcel::Parcel (int trackingNumber, std::string sender,
   mRecieverAddress = reciever;
   mWeight = weight;
   mTravelDistance = travelDistance; 
-  mbIsInsured = true; 
-  mbIsRushed = true; 
+  mbIsInsured = false; 
+  mbIsRushed = false; 
   mbIsDelivered = false; 
 }
 
 //***************************************************************************
-// Function:	  getWeight 
-//
-// Description:	Retrieve the weight of the parcel.
-//
-// Parameters:	none 
-//
-// Returned:		The weight of the parcel. 
-//***************************************************************************
-int Parcel::getWeight () const {
-  return mWeight; 
-}
-
-//***************************************************************************
-// Function:	  getDistance
-//
-// Description: Retrieve the travel distance of the parcel. 
-//
-// Parameters:	none
-//
-// Returned:		The distance of the parcel.
-//***************************************************************************
-int Parcel::getDistance () const {
-  return mTravelDistance;
-}
-
-//***************************************************************************
-// Function:	 
+// Function:	  getInsured 
 //
 // Description:	
 //
-// Parameters:	 
+// Parameters:	none
 //
 // Returned:		 
 //***************************************************************************
 bool Parcel::getInsured () const {
-  return mbIsInsured;                                                         // is this correct?? 
+  return mbIsInsured;   
 }
 
 //***************************************************************************
-// Function:	 
+// Function:	  getRushed
 //
 // Description:	
 //
-// Parameters:	 
+// Parameters:	none
 //
 // Returned:		 
 //***************************************************************************
 bool Parcel::getRushed () const {
-  return mbIsRushed;                                                          // is this correct? 
+  return mbIsRushed;               
 }
 
 //***************************************************************************
@@ -104,15 +79,15 @@ int Parcel::getTID () const {
 }
 
 //***************************************************************************
-// Function:	 
+// Function:	  getCost
 //
 // Description:	
 //
-// Parameters:	 
+// Parameters:	none
 //
-// Returned:		 
+// Returned:		
 //***************************************************************************
-double Parcel::getCost () const {
+double Parcel::getCost () {
   return mCost;
 }
 
@@ -127,9 +102,10 @@ double Parcel::getCost () const {
 // Returned:		True, if the Parcel TID, to and from address is read in; 
 //              else, false. 
 //***************************************************************************
-bool Parcel::read (istream& rcIn) {
+bool Parcel::read (istream &rcIn) {
   bool bIsRead = true;
-  if (rcIn >> mTrackingNumber >> mSenderAddress >> mRecieverAddress) {
+  if (rcIn >> mTrackingNumber >> mSenderAddress >> mRecieverAddress 
+           >> mWeight >> mTravelDistance) {
     bIsRead = true;
   }
   else {
@@ -147,7 +123,7 @@ bool Parcel::read (istream& rcIn) {
 //
 // Returned:		ostream - the output stream
 //***************************************************************************
-void Parcel::print (std::ostream& rcOut) const {
-  rcOut << "TID: " << mTrackingNumber << "\tFrom: " << mSenderAddress
+void Parcel::print (std::ostream &rcOut) const {
+  rcOut << endl << "TID: " << mTrackingNumber << "\tFrom: " << mSenderAddress
         << "\tTo: " << mRecieverAddress << "\t";
 }

@@ -25,14 +25,17 @@ class PostcardParcel : public Parcel {
     PostcardParcel (int trackingNumber, string sender, string reciever,
                     int weight, int travelDistance, string message);
    
-    int getDeliveryDay () const override;                                  // can i put overide ?
-    double getCost () const override;                                  // can i put overide ?
+    virtual int getDeliveryDay () const;
+    virtual double getInsuranceCost ();
+    virtual double getRushCost ();
+    virtual double getParcelCost ();
+    virtual double getCost ();
     
-    virtual void setInsurance (bool insured);
-    virtual void setRush (bool rushed);
+    virtual void setInsurance ();
+    virtual void setRush ();
 
-    virtual bool read (istream& rcIn);
-    virtual void print (ostream& rcOut) const;
+    virtual bool read (istream &rcIn);
+    virtual void print (ostream &rcOut) const;
 
   private:
     string mMessage;

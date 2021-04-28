@@ -80,64 +80,114 @@ int OvernightPackageParcel::getDeliveryDay () const {
 }
 
 //***************************************************************************
+// Function:	  getInsuranceCost
+//
+// Description:	Obtains the insurance cost if the package is insured. The 
+//              insurance cost is 25% of the current cost.  
+//
+// Parameters:	none
+//
+// Returned:		The cost of the insurance. 
+//***************************************************************************
+double OvernightPackageParcel::getInsuranceCost () {
+  const double INSURANCE_RATE = 1.25;
+  double cost = 0;
+
+  if (mbIsInsured) {
+    cost = INSURANCE_RATE;
+  }
+  return cost;
+}
+
+//***************************************************************************
+// Function:	  getRushCost
+//
+// Description:	Obtains the rush cost if the package is rushed. The rush 
+//              cost is 75% of the current cost. 
+//
+// Parameters:	none
+//
+// Returned:		The rush cost for the letter. 
+//***************************************************************************
+double OvernightPackageParcel::getRushCost () {
+  const double RUSH_RATE = 1.75;
+  double cost = 0;
+  if (mbIsRushed) {
+    cost = RUSH_RATE;
+  }
+  return cost;
+}
+
+//***************************************************************************
+// Function:	  getParcelCost
+//
+// Description:	Obtains the cost of the Parcel. The cost of a package is 
+//              $20 if the volume of the package is greater than 100; 
+//              otherwise, it is $12.
+//
+// Parameters:	none
+//
+// Returned:		The cost of the package.  
+//***************************************************************************
+double OvernightPackageParcel::getParcelCost () {
+  const int HIGH_VOLUME = 100;
+  const int HIGH_VOLUME_COST = 20;
+  const int LOW_VOLUME_COST = 12;
+
+  double cost = 0;
+
+  if (mVolume > HIGH_VOLUME) {
+    cost = HIGH_VOLUME_COST;
+  }
+  else {
+    cost = LOW_VOLUME_COST;
+  }
+
+  return cost;
+}
+
+//***************************************************************************
 // Function:	  getCost
 //
-// Description:	
+// Description:	Returns the total cost of the package parcel, after taking 
+//              into account whether the package is rushed or insured. If 
+//              rushed, the rush price is added, if insured, then the 
+//              insurance price is added to the cost. 
 //
 // Parameters:	none
 //
 // Returned:		The total cost of the overnight package parcel. 
 //***************************************************************************
-double OvernightPackageParcel::getCost () const {
-  const int HIGH_VOLUME = 100;
-  const int HIGH_VOLUME_COST = 20; 
-  const int LOW_VOLUME_COST = 12; 
-  const double INSURANCE_RATE = 1.25;
-  const double RUSH_RATE = 1.75;
-
-  double returnAmount = 0;
-
-  if (mVolume > HIGH_VOLUME) {
-    returnAmount = HIGH_VOLUME_COST;
-  }
-  else {
-    returnAmount = LOW_VOLUME_COST;
-  }
-
-  if (mbIsInsured) {
-    returnAmount *= INSURANCE_RATE;
-  }
-
-  if (mbIsRushed) {
-    returnAmount *= RUSH_RATE; 
-  }
-
-  return returnAmount;
+double OvernightPackageParcel::getCost () {
+  return getParcelCost () + getInsuranceCost () + getRushCost ();
 }
 
 //***************************************************************************
 // Function:	  setInsurance 
 //
-// Description:	 
+// Description:	If the parcel is insured, the default bool for mbIsInsured is 
+//              reassigned with "true". 
 //
-// Parameters:	
+// Parameters:	none
 //
-// Returned:		 
+// Returned:		none 
 //***************************************************************************
-void OvernightPackageParcel::setInsurance (bool insured) {             
-  mbIsInsured = insured;
+void OvernightPackageParcel::setInsurance () {             
+  mbIsInsured = true;
 }
+
 //***************************************************************************
 // Function:	  setRush
 //
-// Description:	 
+// Description:	If the parcel is rushed, the default bool for mbIsRushed is 
+//              reassigned with "true". 
 //
-// Parameters:	
+// Parameters:	none
 //
-// Returned:		
+// Returned:		none
 //***************************************************************************
-void OvernightPackageParcel::setRush (bool rushed) {
-  mbIsRushed = rushed;
+void OvernightPackageParcel::setRush () {
+  mbIsRushed = true;
 }
 
 //***************************************************************************
@@ -151,10 +201,10 @@ void OvernightPackageParcel::setRush (bool rushed) {
 // Returned:		True, if the OvernightPackageParcel volume is read in; else, 
 //              false. 
 //***************************************************************************
-bool OvernightPackageParcel::read (istream& rcIn) {
+bool OvernightPackageParcel::read (istream &rcIn) {
   bool bIsRead = Parcel::read (rcIn);
 
-  if (rcIn >> mWeight >> mTravelDistance >> mVolume) {
+  if (rcIn >> mVolume) {
     bIsRead = true;
   }
   else {
@@ -172,15 +222,15 @@ bool OvernightPackageParcel::read (istream& rcIn) {
 //
 // Returned:	  none
 //***************************************************************************
-void OvernightPackageParcel::print (ostream& rcOut) const {
+void OvernightPackageParcel::print (ostream &rcOut) const {
 
   Parcel::print (rcOut);
 
-  if (mbIsInsured) {                                                      // order?
-    rcOut << "OVERNIGHT\t" << "INSURED\t";
+  if (mbIsInsured) {      
+    rcOut << "INSURED\t" << "OVERNIGHT!\t";
   }
 
   if (mbIsRushed) {
-    rcOut << "OVERNIGHT\t" <<"RUSHED\t";
+    rcOut << "RUSH\t" << "OVERNIGHT!\t";
   }
 }
