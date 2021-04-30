@@ -32,11 +32,16 @@ OvernightPackageParcel::OvernightPackageParcel () : Parcel () {
 // Description:	Call the Parcels constructor, set mVolume equal to the given 
 //              parameter. 
 //
-// Parameters:	
+// Parameters:	trackingNumber    - the tracking number to store  
+//							sender            - parcel's sender
+//              reciever          - parcel's reciever 
+//              weight            - parcel's weight in ounces 
+//              travelDistance    - distance package will travel 
+//              volume            - the volume of the package
 //
 // Returned:		none
 //***************************************************************************
-OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,           // check coding standards 
+OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,        
                                                 std::string sender,     
                                                 std::string reciever, 
                                                 int weight, 
@@ -52,11 +57,11 @@ OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,           //
 //***************************************************************************
 // Function:	  getDeliveryDay
 //
-// Description:	
+// Description:	Obtains the delivery day of the package parcel. 
 //
 // Parameters:	none
 //
-// Returned:		
+// Returned:		The delivery day of the package parcel. 
 //***************************************************************************
 int OvernightPackageParcel::getDeliveryDay () const {
   const int RUSHED_DELIVERY_DAY = 1;
@@ -110,10 +115,10 @@ double OvernightPackageParcel::getInsuranceCost () {
 // Returned:		The rush cost for the letter. 
 //***************************************************************************
 double OvernightPackageParcel::getRushCost () {
-  const double RUSH_RATE = 1.75;
+  const double RUSH_RATE = 0.75;
   double cost = 0;
   if (mbIsRushed) {
-    cost = RUSH_RATE;
+    cost = getParcelCost () * RUSH_RATE;
   }
   return cost;
 }
@@ -227,10 +232,13 @@ void OvernightPackageParcel::print (ostream &rcOut) const {
   Parcel::print (rcOut);
 
   if (mbIsInsured) {      
-    rcOut << "INSURED\t" << "OVERNIGHT!\t";
+    rcOut << " INSURED\t";
   }
 
   if (mbIsRushed) {
-    rcOut << "RUSH\t" << "OVERNIGHT!\t";
+    rcOut << " RUSH\t";
   }
+ 
+  rcOut << " OVERNIGHT!\t";
+
 }

@@ -16,6 +16,7 @@
 using namespace std;
 
 class Parcel {
+
   public:  
     Parcel (int trackingNumber = 0, string sender = "", string reciever = "",   
             int weight = 0, int travelDistance = 0);
@@ -24,29 +25,29 @@ class Parcel {
     bool getRushed () const; 
     int getTID () const;             
 
-    virtual int getDeliveryDay () const = 0;                            //pure so dont implment? 
-    virtual double getInsuranceCost () = 0;                             //pure didnt implemnt 
-    virtual double getRushCost () = 0;                                  //pure didnt implemnt 
-    virtual double getParcelCost () = 0;                                //pure didnt implemnt 
-    virtual double getCost () = 0;                                      //pure but i implmented :-/
-
+    virtual int getDeliveryDay () const = 0;                
+    virtual double getInsuranceCost () = 0;                            
+    virtual double getRushCost () = 0;                                
+    virtual double getParcelCost () = 0;                       
+    virtual double getCost () = 0;     
     virtual void setInsurance () = 0;
-    virtual void setRush () = 0;
+    virtual void setRush () = 0; 
 
-    virtual bool read (istream& rcIn);
-    virtual void print (ostream& rcOut) const;
+    virtual bool read (istream &rcIn);
+    virtual void print (ostream &rcOut) const;
 
   protected : 
     int mWeight;
     int mTravelDistance;
     bool mbIsInsured;
     bool mbIsRushed;
-    bool mbIsDelivered; 
+    bool mbIsDelivered;                                             //might not need this 
 
   private:
     string mSenderAddress;
     string mRecieverAddress;
     int mTrackingNumber;  
     double mCost; 
+
 };
 

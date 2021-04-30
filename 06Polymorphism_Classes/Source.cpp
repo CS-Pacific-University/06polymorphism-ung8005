@@ -8,7 +8,7 @@
 // Purpose:		 Driver used to read various mail parcels from a data file and 
 //             allows the user to view the parcels, add insurance, rush 
 //             delivery, or deliver any parcel. 
-// Hours:		   14 
+// Hours:		   24
 // Computer:	 WindowsOS
 //***************************************************************************
 
@@ -23,11 +23,12 @@ using namespace std;
 
 bool openFileForRead (ifstream &rcInFile, string fileName);
 void printMenuHeading ();
-void populatingArray (Parcel* apcParcel[], int &numParcels, 
+void populatingArray (Parcel *apcParcel[], int &numParcels, 
                       ifstream &inFile);
-void printAll (Parcel* apcParcel[], int& numParcels);
-void addInsurance (Parcel* apcParcel[], int& numParcels);
-void addRush (Parcel* apcParcel[], int& numParcels);
+void printAll (Parcel *apcParcel[], int &numParcels);
+void addInsurance (Parcel *apcParcel[], int &numParcels);
+void addRush (Parcel *apcParcel[], int &numParcels);
+void deliverParcel (Parcel *apcParcel[], int &numParcels);
 
 /****************************************************************************
 Function:		  main
@@ -54,7 +55,7 @@ int main() {
   Parcel *apcParcel[MAX_PARCEL] = { nullptr }; 
   int numParcels = 0;
   char parcelType;
-  int choice;
+  int choice = 1;
   int TID; 
 
   ifstream inFile; 
@@ -89,7 +90,7 @@ int main() {
 
     do {
       printMenuHeading ();
-      cout << endl << "Choice> ";
+      cout << endl << "Choice> ";                                      // making this into a function 
       cin >> choice;
     } while (!(PRINT_ALL == choice || ADD_INSURANCE == choice
              || ADD_RUSH == choice || DELIVER == choice || QUIT == choice));
@@ -107,17 +108,16 @@ int main() {
         addRush (apcParcel, numParcels);
         break;
 
-      //case DELIVER:
-      //  cout << "TID> ";
-      //  cin >> TID;
-      //  apcParcel[TID - INDEX_ADJUSTMENT]->setDeliveryDay ();                            // need to create this in each class
-      //  cout << "Delivered!" << apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay ();   // re-edit this in each class 
-      //  apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
-      //  break;
+      case DELIVER:
+        deliverParcel (apcParcel, numParcels);
+        break;
     }
   } while (choice != QUIT); 
-    
-                                              // need to delete the populated arrays 
+  
+  for (int i = 0; i < numParcels; i++) {
+    delete apcParcel[i];
+  }
+
   inFile.close ();
 
   return EXIT_SUCCESS;
@@ -170,9 +170,12 @@ void printMenuHeading () {
 /****************************************************************************
 Function:    populatingArray
 
-Description:  
+Description: Populates the array by storing the read in values from the file
+             into the array apcParcels. 
 
-Parameters:   
+Parameters:  *apcParcel[]  - an array of pointers to Parcel
+             numParcels    - the number of parcels 
+             inFile        - data read in from the file stream 
 
 Returned:		 none
 ****************************************************************************/
@@ -185,24 +188,31 @@ void populatingArray (Parcel *apcParcel[], int &numParcels,
 /****************************************************************************
 Function:    printAll
 
-Description:
+Description: Prints all the data about the parcels that was read in from the 
+             file. 
 
-Parameters:
+Parameters: *apcParcel[]  - an array of pointers to Parcel
+            numParcels    - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
 void printAll (Parcel *apcParcel[], int &numParcels) {
   for (int i = 0; i < numParcels; i++) {
-    apcParcel[i]->print (cout);
+    if (apcParcel[i] != nullptr) {
+      apcParcel[i]->print (cout);
+    }
   }
+  cout << endl;
 }
 
 /****************************************************************************
 Function:    addInsurance 
 
-Description:
+Description: If the user chooses to insure the parcel, the insurance cost 
+             of the parcel is implemented. 
 
-Parameters:
+Parameters:  *apcParcel[]  - an array of pointers to Parcel
+             numParcels    - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
@@ -210,22 +220,25 @@ void addInsurance (Parcel *apcParcel[], int &numParcels) {
   const int INDEX_ADJUSTMENT = 1;
   int TID;
 
-  cout << "TID> ";
+  cout << endl << "TID> ";
   cin >> TID;
   if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
     apcParcel[TID - INDEX_ADJUSTMENT]->setInsurance ();
     cout << "Added Insurance for $" 
          << apcParcel[TID - INDEX_ADJUSTMENT]->getInsuranceCost ();
     apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
+    cout << endl;
   }
 }
 
 /****************************************************************************
 Function:    addRush
 
-Description:
+Description: If the user chooses to rush the parcel, the rush cost is 
+             implemented. 
 
-Parameters:
+Parameters:  *apcParcel[]  - an array of pointers to Parcel
+             numParcels    - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
@@ -233,16 +246,52 @@ void addRush (Parcel *apcParcel[], int &numParcels) {
   const int INDEX_ADJUSTMENT = 1;
   int TID;
 
-  cout << "TID> ";
+  cout << endl << "TID> ";
   cin >> TID;
   if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
     apcParcel[TID - INDEX_ADJUSTMENT]->setRush ();
-    cout << "Added Rush for $" << apcParcel[TID - INDEX_ADJUSTMENT]->getRushCost ();
+    cout << "Added Rush for $" 
+         << apcParcel[TID - INDEX_ADJUSTMENT]->getRushCost ();
     apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
+    cout << endl;
   }
 }
+
 /****************************************************************************
-Function:
+Function:    deliverParcel
+
+Description: If the user chooses to deliver the parcel, the program will
+             output the total cost of the parcel as well as the amount of 
+             days the parcel will take to be delivered. 
+
+Parameters:  *apcParcel[]  - an array of pointers to Parcel
+             numParcels    - the number of parcels 
+
+Returned:		 none
+****************************************************************************/
+void deliverParcel (Parcel *apcParcel[], int &numParcels) {
+  const int INDEX_ADJUSTMENT = 1;
+
+  int TID; 
+
+  cout << endl << "TID> ";
+  cin >> TID;
+
+  if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
+    apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay ();
+    cout << "Delivered!" << endl 
+         << apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay () 
+         << " Day, $" << fixed << setprecision (2) 
+         << apcParcel[TID - INDEX_ADJUSTMENT]->getCost (); 
+    apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
+    cout << endl;
+    delete apcParcel[TID - INDEX_ADJUSTMENT];
+    apcParcel[TID - INDEX_ADJUSTMENT] = nullptr;
+  }
+}
+
+/****************************************************************************
+Function:    validateChoice 
 
 Description:
 
@@ -250,23 +299,20 @@ Parameters:
 
 Returned:		 none
 ****************************************************************************/
-
-/****************************************************************************
-Function:
-
-Description:
-
-Parameters:
-
-Returned:		 none
-****************************************************************************/
-
-/****************************************************************************
-Function:
-
-Description:
-
-Parameters:
-
-Returned:		 none
-****************************************************************************/
+//void validateChoice () {
+//  const int PRINT_ALL = 1;
+//  const int ADD_INSURANCE = 2;
+//  const int ADD_RUSH = 3;
+//  const int DELIVER = 4;
+//  const int QUIT = 5;
+//
+//  int choice;
+//
+//  do {
+//    printMenuHeading ();
+//    cout << endl << "Choice> ";
+//    cin >> choice;
+//  } while (!(PRINT_ALL == choice || ADD_INSURANCE == choice
+//           || ADD_RUSH == choice || DELIVER == choice || QUIT == choice));
+//
+//}

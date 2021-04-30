@@ -35,4 +35,5 @@ class LetterParcel : public Parcel {
 
     virtual bool read (istream &rcIn);
     virtual void print (ostream &rcOut) const;
+
 };

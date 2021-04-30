@@ -23,8 +23,9 @@ class OvernightPackageParcel : public Parcel {
 
   public:
     OvernightPackageParcel ();
-    OvernightPackageParcel (int trackingNumber, string sender, string reciever,
-                            int weight, int travelDstance, int volume);
+    OvernightPackageParcel (int trackingNumber, string sender,
+                            string reciever, int weight, int travelDstance, 
+                            int volume);
 
     virtual int getDeliveryDay () const;
     virtual double getInsuranceCost ();

@@ -63,12 +63,16 @@ int PostcardParcel::getDeliveryDay () const {
   const int RUSHED_DAY = 2;
   const int MILES_PER_DAY = 10;
 
-  int deliveryDay = MINIMUM_DAY;
+  int deliveryDay = 0;
 
-  deliveryDay += mTravelDistance / MILES_PER_DAY;                        // check
+  deliveryDay += mTravelDistance / MILES_PER_DAY; 
 
   if (mbIsRushed && deliveryDay > MINIMUM_DAY) {
     deliveryDay -= RUSHED_DAY;
+  }
+
+  if (deliveryDay < MINIMUM_DAY) {
+    deliveryDay = MINIMUM_DAY;
   }
 
   return deliveryDay;
@@ -207,13 +211,14 @@ void PostcardParcel::print (ostream &rcOut) const {
 
   Parcel::print (rcOut);
 
-  rcOut << mMessage; 
-
   if (mbIsInsured) {
-    rcOut << "INSURED\t";
+    rcOut << "INSURED\t\t";
   }
 
   if (mbIsRushed) {
-    rcOut << "RUSH\t";
+    rcOut << "RUSH\t\t";
   }
+
+  rcOut << mMessage << "\t";
+
 }

@@ -20,7 +20,7 @@
 // Parameters:	
 //
 // Returned:		none
-//*************************************************************************** // nothing to initialize, is it okay if i still have the constructor? 
+//***************************************************************************
 LetterParcel::LetterParcel () : Parcel () {
 }
 
@@ -34,7 +34,7 @@ LetterParcel::LetterParcel () : Parcel () {
 //
 // Returned:		none
 //***************************************************************************
-LetterParcel::LetterParcel (int trackingNumber, std::string sender,             // what do i do for this constructor? what am i suppose to initialize? the protcted variables????
+LetterParcel::LetterParcel (int trackingNumber, std::string sender,       
                             std::string reciever, int weight,
                             int travelDistance) :
                             Parcel (trackingNumber, sender, reciever,
@@ -55,12 +55,16 @@ int LetterParcel::getDeliveryDay () const {
   const int RUSHED_DAY = 1;
   const int MILES_PER_DAY = 100;
 
-  int deliveryDay = MINIMUM_DAY;
+  int deliveryDay = 0;
 
-  deliveryDay += mTravelDistance / MILES_PER_DAY;                        // check
+  deliveryDay += mTravelDistance / MILES_PER_DAY;  
 
   if (mbIsRushed && deliveryDay > MINIMUM_DAY) {
     deliveryDay -= RUSHED_DAY;
+  }
+
+  if (deliveryDay < MINIMUM_DAY) {
+    deliveryDay = MINIMUM_DAY;
   }
 
   return deliveryDay;
@@ -199,7 +203,7 @@ void LetterParcel::print (ostream &rcOut) const {
   Parcel::print (rcOut);
 
   if (mbIsInsured) { 
-    rcOut << "INSURED\t";
+    rcOut << " INSURED\t";
   }
 
   if (mbIsRushed) {

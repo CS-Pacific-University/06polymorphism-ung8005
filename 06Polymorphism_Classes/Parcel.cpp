@@ -42,11 +42,13 @@ Parcel::Parcel (int trackingNumber, std::string sender,
 //***************************************************************************
 // Function:	  getInsured 
 //
-// Description:	
+// Description:	Retrieves the binary variable of the parcel in regards to 
+//              insurance, the two possible values are true or false. 
 //
 // Parameters:	none
 //
-// Returned:		 
+// Returned:		The value of the parcel depending on if it has insurance
+//              (true) or not (false).
 //***************************************************************************
 bool Parcel::getInsured () const {
   return mbIsInsured;   
@@ -55,11 +57,13 @@ bool Parcel::getInsured () const {
 //***************************************************************************
 // Function:	  getRushed
 //
-// Description:	
+// Description:	Retrieves the binary variable of the parcel in regards to 
+//              if it is rushed, the two possible values are true or false. 
 //
 // Parameters:	none
 //
-// Returned:		 
+// Returned:		The value of the parcel depending on if it is rushed (true)
+//              not rushed (false).
 //***************************************************************************
 bool Parcel::getRushed () const {
   return mbIsRushed;               
@@ -79,19 +83,6 @@ int Parcel::getTID () const {
 }
 
 //***************************************************************************
-// Function:	  getCost
-//
-// Description:	
-//
-// Parameters:	none
-//
-// Returned:		
-//***************************************************************************
-double Parcel::getCost () {
-  return mCost;
-}
-
-//***************************************************************************
 // Function:	  read
 //
 // Description:	Inputs the Parcel to the stream if the read in data is 
@@ -104,7 +95,7 @@ double Parcel::getCost () {
 //***************************************************************************
 bool Parcel::read (istream &rcIn) {
   bool bIsRead = true;
-  if (rcIn >> mTrackingNumber >> mSenderAddress >> mRecieverAddress 
+  if (rcIn >> mTrackingNumber >> mRecieverAddress >> mSenderAddress
            >> mWeight >> mTravelDistance) {
     bIsRead = true;
   }
