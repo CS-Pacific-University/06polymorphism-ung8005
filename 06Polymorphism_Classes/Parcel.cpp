@@ -95,6 +95,7 @@ int Parcel::getTID () const {
 //***************************************************************************
 bool Parcel::read (istream &rcIn) {
   bool bIsRead = true;
+
   if (rcIn >> mTrackingNumber >> mRecieverAddress >> mSenderAddress
            >> mWeight >> mTravelDistance) {
     bIsRead = true;
@@ -102,6 +103,7 @@ bool Parcel::read (istream &rcIn) {
   else {
     bIsRead = false;
   }
+
   return bIsRead;
 }
 

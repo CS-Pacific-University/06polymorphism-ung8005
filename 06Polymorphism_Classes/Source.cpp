@@ -1,5 +1,5 @@
 //***************************************************************************
-// File name:	 main.cpp
+// File name:	 Source.cpp
 // Author:		 Ashley Ung
 // Date:			 4/20/2021
 // Class:			 CS 250
@@ -29,6 +29,7 @@ void printAll (Parcel *apcParcel[], int &numParcels);
 void addInsurance (Parcel *apcParcel[], int &numParcels);
 void addRush (Parcel *apcParcel[], int &numParcels);
 void deliverParcel (Parcel *apcParcel[], int &numParcels);
+bool validTID (Parcel *apcParcel[], int TID, int &numParcels);
 
 /****************************************************************************
 Function:		  main
@@ -56,7 +57,6 @@ int main() {
   int numParcels = 0;
   char parcelType;
   int choice = 1;
-  int TID; 
 
   ifstream inFile; 
 
@@ -64,7 +64,7 @@ int main() {
 
   cout << "Mail Simulator!" << endl; 
 
-  while (inFile >> parcelType) { 
+  while (inFile >> parcelType && numParcels < MAX_PARCEL) {   
     switch (parcelType) {
       case LETTER: 
         apcParcel[numParcels] = new LetterParcel; 
@@ -86,11 +86,16 @@ int main() {
     }
   }
 
+  if (numParcels == 0) {
+    cout << "We have no parcels to deliver :-)";
+    exit (EXIT_FAILURE);
+  }
+
   do {
 
     do {
       printMenuHeading ();
-      cout << endl << "Choice> ";                                      // making this into a function 
+      cout << endl << "Choice> "; 
       cin >> choice;
     } while (!(PRINT_ALL == choice || ADD_INSURANCE == choice
              || ADD_RUSH == choice || DELIVER == choice || QUIT == choice));
@@ -143,6 +148,7 @@ bool openFileForRead (ifstream &rcInFile, string fileName) {
     cout << "Error opening file.";
     bIsOpen = false;
   }
+
   return bIsOpen;
 }
 
@@ -173,7 +179,7 @@ Function:    populatingArray
 Description: Populates the array by storing the read in values from the file
              into the array apcParcels. 
 
-Parameters:  *apcParcel[]  - an array of pointers to Parcel
+Parameters:  apcParcel     - an array of pointers to Parcel
              numParcels    - the number of parcels 
              inFile        - data read in from the file stream 
 
@@ -181,7 +187,7 @@ Returned:		 none
 ****************************************************************************/
 void populatingArray (Parcel *apcParcel[], int &numParcels, 
                       ifstream &inFile) {
-  apcParcel[numParcels]->read (inFile);
+  apcParcel[numParcels]->read (inFile); 
   numParcels++;
 }
 
@@ -191,17 +197,18 @@ Function:    printAll
 Description: Prints all the data about the parcels that was read in from the 
              file. 
 
-Parameters: *apcParcel[]  - an array of pointers to Parcel
-            numParcels    - the number of parcels 
+Parameters:  apcParcel  - an array of pointers to Parcel
+             numParcels - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
 void printAll (Parcel *apcParcel[], int &numParcels) {
   for (int i = 0; i < numParcels; i++) {
     if (apcParcel[i] != nullptr) {
-      apcParcel[i]->print (cout);
+      apcParcel[i]->print (cout); 
     }
   }
+
   cout << endl;
 }
 
@@ -211,23 +218,27 @@ Function:    addInsurance
 Description: If the user chooses to insure the parcel, the insurance cost 
              of the parcel is implemented. 
 
-Parameters:  *apcParcel[]  - an array of pointers to Parcel
-             numParcels    - the number of parcels 
+Parameters:  apcParcel  - an array of pointers to Parcel
+             numParcels - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
 void addInsurance (Parcel *apcParcel[], int &numParcels) {
   const int INDEX_ADJUSTMENT = 1;
+  
   int TID;
 
   cout << endl << "TID> ";
   cin >> TID;
-  if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
-    apcParcel[TID - INDEX_ADJUSTMENT]->setInsurance ();
-    cout << "Added Insurance for $" 
-         << apcParcel[TID - INDEX_ADJUSTMENT]->getInsuranceCost ();
-    apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
-    cout << endl;
+
+  if (validTID (apcParcel, TID, numParcels)) {
+    if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
+      apcParcel[TID - INDEX_ADJUSTMENT]->setInsurance ();
+      cout << "Added Insurance for $"
+           << apcParcel[TID - INDEX_ADJUSTMENT]->getInsuranceCost ();
+      apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
+      cout << endl;
+    }
   }
 }
 
@@ -237,23 +248,27 @@ Function:    addRush
 Description: If the user chooses to rush the parcel, the rush cost is 
              implemented. 
 
-Parameters:  *apcParcel[]  - an array of pointers to Parcel
-             numParcels    - the number of parcels 
+Parameters:  apcParcel  - an array of pointers to Parcel
+             numParcels - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
 void addRush (Parcel *apcParcel[], int &numParcels) {
   const int INDEX_ADJUSTMENT = 1;
+  
   int TID;
 
   cout << endl << "TID> ";
   cin >> TID;
-  if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
-    apcParcel[TID - INDEX_ADJUSTMENT]->setRush ();
-    cout << "Added Rush for $" 
-         << apcParcel[TID - INDEX_ADJUSTMENT]->getRushCost ();
-    apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
-    cout << endl;
+
+  if (validTID (apcParcel, TID, numParcels)) {
+    if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
+      apcParcel[TID - INDEX_ADJUSTMENT]->setRush ();
+      cout << "Added Rush for $"
+           << apcParcel[TID - INDEX_ADJUSTMENT]->getRushCost ();
+      apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
+      cout << endl;
+    }
   }
 }
 
@@ -264,8 +279,8 @@ Description: If the user chooses to deliver the parcel, the program will
              output the total cost of the parcel as well as the amount of 
              days the parcel will take to be delivered. 
 
-Parameters:  *apcParcel[]  - an array of pointers to Parcel
-             numParcels    - the number of parcels 
+Parameters:  apcParcel    - an array of pointers to Parcel
+             numParcels   - the number of parcels 
 
 Returned:		 none
 ****************************************************************************/
@@ -277,42 +292,41 @@ void deliverParcel (Parcel *apcParcel[], int &numParcels) {
   cout << endl << "TID> ";
   cin >> TID;
 
-  if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
-    apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay ();
-    cout << "Delivered!" << endl 
-         << apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay () 
-         << " Day, $" << fixed << setprecision (2) 
-         << apcParcel[TID - INDEX_ADJUSTMENT]->getCost (); 
-    apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
-    cout << endl;
-    delete apcParcel[TID - INDEX_ADJUSTMENT];
-    apcParcel[TID - INDEX_ADJUSTMENT] = nullptr;
+  if (validTID (apcParcel, TID, numParcels)) {
+    if (apcParcel[TID - INDEX_ADJUSTMENT] != nullptr) {
+      apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay ();
+      cout << "Delivered!" << endl
+           << apcParcel[TID - INDEX_ADJUSTMENT]->getDeliveryDay ()
+           << " Day, $" << fixed << setprecision (2)
+           << apcParcel[TID - INDEX_ADJUSTMENT]->getCost ();
+      apcParcel[TID - INDEX_ADJUSTMENT]->print (cout);
+      cout << endl;
+      delete apcParcel[TID - INDEX_ADJUSTMENT];
+      apcParcel[TID - INDEX_ADJUSTMENT] = nullptr;
+    }
   }
 }
 
 /****************************************************************************
-Function:    validateChoice 
+Function:    validTID
 
-Description:
+Description: Checks if the TID value entered is a valid value. If the user 
+             inputs a bad TID, the menu and choice prompt will display again.
 
-Parameters:
+Parameters:  apcParcel    - an array of pointers to Parcel
+             TID          - the tracking ID number of the parcel
+             numParcels   - the number of parcels
 
-Returned:		 none
+Returned:		 True, if the tracking ID number is valid; else, false. 
 ****************************************************************************/
-//void validateChoice () {
-//  const int PRINT_ALL = 1;
-//  const int ADD_INSURANCE = 2;
-//  const int ADD_RUSH = 3;
-//  const int DELIVER = 4;
-//  const int QUIT = 5;
-//
-//  int choice;
-//
-//  do {
-//    printMenuHeading ();
-//    cout << endl << "Choice> ";
-//    cin >> choice;
-//  } while (!(PRINT_ALL == choice || ADD_INSURANCE == choice
-//           || ADD_RUSH == choice || DELIVER == choice || QUIT == choice));
-//
-//}
+bool validTID (Parcel *apcParcel[], int TID, int &numParcels) {
+  bool bIsValidTID = false; 
+
+  for (int i = 0; i < numParcels; i++) {
+    if (apcParcel[i] != nullptr && apcParcel[i]->getTID () == TID) {
+      bIsValidTID = true;
+    }
+  }
+
+  return bIsValidTID;
+}

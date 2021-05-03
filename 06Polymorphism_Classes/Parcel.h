@@ -41,7 +41,7 @@ class Parcel {
     int mTravelDistance;
     bool mbIsInsured;
     bool mbIsRushed;
-    bool mbIsDelivered;                                             //might not need this 
+    bool mbIsDelivered; 
 
   private:
     string mSenderAddress;

@@ -1,5 +1,5 @@
 //***************************************************************************
-// File name:	 Parcel.cpp
+// File name:	 LetterParcel.cpp
 // Author:		 Ashley Ung 
 // Date:		   4/20/2021
 // Class:		   CS 250
@@ -17,7 +17,7 @@
 //
 // Description:	Default constructor for letter parcel.  
 //
-// Parameters:	
+// Parameters:	none
 //
 // Returned:		none
 //***************************************************************************
@@ -30,7 +30,11 @@ LetterParcel::LetterParcel () : Parcel () {
 // Description:	Call the Parcel constructor, set mInsurance equal to the  
 //              given parameter. 
 //
-// Parameters:	
+// Parameters:	trackingNumber    - the tracking number to store  
+//							sender            - parcel's sender
+//              reciever          - parcel's reciever 
+//              weight            - parcel's weight in ounces 
+//              travelDistance    - distance package will travel 
 //
 // Returned:		none
 //***************************************************************************
@@ -44,11 +48,14 @@ LetterParcel::LetterParcel (int trackingNumber, std::string sender,
 //***************************************************************************
 // Function:	  getDeliveryDay
 //
-// Description:	
-//
+// Description:	Obtains the delivery day of the Parcel by taking into account 
+//              whether the parcel was rushed, which will rush the letter by 
+//              one day. Typically, a letter will travel 100 miles per day
+//              and travel a minimum of 1 day. 
+// 
 // Parameters:	none
 //
-// Returned:		
+// Returned:		The delivery day of the letter Parcel. 
 //***************************************************************************
 int LetterParcel::getDeliveryDay () const {
   const int MINIMUM_DAY = 1;
@@ -81,6 +88,7 @@ int LetterParcel::getDeliveryDay () const {
 //***************************************************************************
 double LetterParcel::getInsuranceCost () {
   double const INSURANCE_COST = 0.45;
+
   double cost = 0;
 
   if (mbIsInsured) {
@@ -101,7 +109,9 @@ double LetterParcel::getInsuranceCost () {
 //***************************************************************************
 double LetterParcel::getRushCost () {
   const double DISCOUNT_CONVERSION = 10;
+
   double cost = 0;
+
   if (mbIsRushed) {
     cost = getParcelCost () / DISCOUNT_CONVERSION;
   }
@@ -127,9 +137,10 @@ double LetterParcel::getParcelCost () {
 // Function:	  getCost
 //
 // Description: Returns the total cost of the letter parcel, after taking 
-//              into account whether the letter is rushed or insured. If 
-//              rushed, the rush price is added, if insured, then the 
-//              insurance price is added to the cost. 
+//              into account whether the letter is rushed and insured and 
+//              includes those costs after evaluating if the parcel is 
+//              insured and rush; does this by calling the getRushCost and  
+//              the getInsuranceCost functions. 
 //
 // Parameters:	none
 //
@@ -143,7 +154,7 @@ double LetterParcel::getCost () {
 // Function:	  setInsurance 
 //
 // Description:	If the parcel is insured, the default bool for mbIsInsured is 
-//              reassigned with "true". 
+//              reassigned to "true". 
 //
 // Parameters:	none
 //
@@ -157,7 +168,7 @@ void LetterParcel::setInsurance () {
 // Function:	  setRush
 //
 // Description:	If the parcel is rushed, the default bool for mbIsRushed is 
-//              reassigned with "true". 
+//              reassigned to "true". 
 //
 // Parameters:	none
 //
@@ -177,7 +188,7 @@ void LetterParcel::setRush () {
 //
 // Returned:		True, if the LetterParcel is read in; else, false.
 //***************************************************************************
-bool LetterParcel::read (istream &rcIn) {                                     // is this correct ? 
+bool LetterParcel::read (istream &rcIn) {  
   bool bIsRead = Parcel::read (rcIn);
 
   if (bIsRead) {

@@ -52,11 +52,14 @@ PostcardParcel::PostcardParcel (int trackingNumber, std::string sender,
 //***************************************************************************
 // Function:	  getDeliveryDay
 //
-// Description:	
+// Description:	Obtains the delivery day of the Parcel by taking into account 
+//              whether the parcel was rushed, which will rush the postcard 
+//              by one day. Typically, a postcard will travel 10 miles per 
+//              day and travel a minimum of 1 day. 
 //
 // Parameters:	none
 //
-// Returned:		
+// Returned:		The delivery day. 
 //***************************************************************************
 int PostcardParcel::getDeliveryDay () const {
   const int MINIMUM_DAY = 1;
@@ -90,6 +93,7 @@ int PostcardParcel::getDeliveryDay () const {
 //***************************************************************************
 double PostcardParcel::getInsuranceCost () {
   double const INSURANCE_COST = 0.15;
+
   double cost = 0;
 
   if (mbIsInsured) {
@@ -110,7 +114,9 @@ double PostcardParcel::getInsuranceCost () {
 //***************************************************************************
 double PostcardParcel::getRushCost () {
   const double RUSH_COST = 0.25;
+
   double cost = 0;
+
   if (mbIsRushed) {
     cost = RUSH_COST;
   }
@@ -135,10 +141,11 @@ double PostcardParcel::getParcelCost () {
 //***************************************************************************
 // Function:	  getCost
 //
-// Description:	Returns the total cost of the postcard parcel, after taking 
-//              into account whether the postcard is rushed or insured. If 
-//              rushed, the rush price is added, if insured, then the 
-//              insurance price is added to the cost. 
+// Description:	Returns the total cost of the parcel, after taking into 
+//              account whether the parcel is rushed and insured and includes
+//              those costs after evaluating if the parcel is insured and 
+//              rush; does this by calling the getRushCost and the 
+//              getInsuranceCost functions.
 //
 // Parameters:	none
 //
@@ -212,11 +219,11 @@ void PostcardParcel::print (ostream &rcOut) const {
   Parcel::print (rcOut);
 
   if (mbIsInsured) {
-    rcOut << "INSURED\t\t";
+    rcOut << "INSURED\t";
   }
 
   if (mbIsRushed) {
-    rcOut << "RUSH\t\t";
+    rcOut << "RUSH\t";
   }
 
   rcOut << mMessage << "\t";

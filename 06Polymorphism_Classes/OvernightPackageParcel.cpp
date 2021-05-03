@@ -57,8 +57,13 @@ OvernightPackageParcel::OvernightPackageParcel (int trackingNumber,
 //***************************************************************************
 // Function:	  getDeliveryDay
 //
-// Description:	Obtains the delivery day of the package parcel. 
-//
+// Description:	Obtains the delivery day of the Parcel by taking into account 
+//              whether the parcel was rushed, which will rush the package by 
+//              one day. Typically, a package will be delivered within 1 day 
+//              if the travel distance is less than or equal to 1000 miles; 
+//              otherwise, if the travel distance is greater than 1000 miles,
+//              it will take 2 days. 
+// 
 // Parameters:	none
 //
 // Returned:		The delivery day of the package parcel. 
@@ -96,6 +101,7 @@ int OvernightPackageParcel::getDeliveryDay () const {
 //***************************************************************************
 double OvernightPackageParcel::getInsuranceCost () {
   const double INSURANCE_RATE = 1.25;
+
   double cost = 0;
 
   if (mbIsInsured) {
@@ -116,7 +122,9 @@ double OvernightPackageParcel::getInsuranceCost () {
 //***************************************************************************
 double OvernightPackageParcel::getRushCost () {
   const double RUSH_RATE = 0.75;
+
   double cost = 0;
+
   if (mbIsRushed) {
     cost = getParcelCost () * RUSH_RATE;
   }
@@ -154,10 +162,11 @@ double OvernightPackageParcel::getParcelCost () {
 //***************************************************************************
 // Function:	  getCost
 //
-// Description:	Returns the total cost of the package parcel, after taking 
-//              into account whether the package is rushed or insured. If 
-//              rushed, the rush price is added, if insured, then the 
-//              insurance price is added to the cost. 
+// Description:	Returns the total cost of the parcel, after taking into 
+//              account whether the parcel is rushed and insured and includes
+//              those costs after evaluating if the parcel is insured and 
+//              rush; does this by calling the getRushCost and the 
+//              getInsuranceCost functions. 
 //
 // Parameters:	none
 //
